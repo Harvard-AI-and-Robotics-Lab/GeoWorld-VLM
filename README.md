@@ -303,10 +303,10 @@ OURS_MODEL=/path/to/exported_hf_model TASK=sat SAT_QTYPE_FILTER=non_action_seque
 ## Citation
 
 ```bibtex
-@article{adaptvis2026,
-  title={AdaptVis: World-Model-Guided Visual Alignment for Spatial Reasoning in Vision-Language Models},
-  author={Anonymous Authors},
-  journal={Preprint},
+@article{gu2026geoworldvlm,
+  title={GeoWorld-VLM: Geometry from World Models for Vision-Language Models},
+  author={Gu, Renjie and Zhou, Kaichen and Luo, Yan and Wang, Mengyu},
+  journal={arXiv preprint arXiv:2605.16713},
   year={2026}
 }
 ```
