@@ -305,11 +305,14 @@ OURS_MODEL=/path/to/exported_hf_model TASK=sat SAT_QTYPE_FILTER=non_action_seque
 ## Citation
 
 ```bibtex
-@article{gu2026geoworldvlm,
-  title={GeoWorld-VLM: Geometry from World Models for Vision-Language Models},
-  author={Gu, Renjie and Zhou, Kaichen and Luo, Yan and Wang, Mengyu},
-  journal={arXiv preprint arXiv:2605.16713},
-  year={2026}
+@misc{gu2026geoworldvlmgeometryworldmodels,
+      title={GeoWorld-VLM: Geometry from World Models for Vision-Language Models}, 
+      author={Renjie Gu and Kaichen Zhou and Yan Luo and Mengyu Wang},
+      year={2026},
+      eprint={2605.16713},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2605.16713}, 
 }
 ```
 
