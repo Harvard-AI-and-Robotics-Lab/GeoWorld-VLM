@@ -1,22 +1,22 @@
-# AdaptVis
+# GeoWorld-VLM
 
-Official implementation for **AdaptVis: World-Model-Guided Visual Alignment for Spatial Reasoning in Vision-Language Models**.
+Official implementation for **GeoWorld-VLM: Geometry from World Models for Vision-Language Models**.
 
-This repository contains the training and evaluation code used for our spatial reasoning experiments with Gemma4 and LingBot-World-Fast. The core idea is to improve a vision-language model's spatial representations by aligning its visual features to a frozen world-model teacher while preserving the original VLM behavior. The repository is organized for reproducibility: data preparation, model paths, training scripts, checkpoint export, and evaluation are separated into configurable entry points.
+This repository contains the training and evaluation code for GeoWorld-VLM, a VLM-side distillation framework that transfers geometry-aware structure from frozen camera-conditioned world models into VLM visual pathways. The method aligns post-projector image features with intermediate world-model representations while keeping the language backbone frozen, so spatial reasoning improves without changing core linguistic behavior. The codebase is organized for reproducibility: data preparation, model paths, training scripts, checkpoint export, and evaluation are separated into configurable entry points.
 
-> Paper, pretrained checkpoints, and full data links will be added after release.
+> Paper: [arXiv:2605.16713](https://arxiv.org/abs/2605.16713)
 
 ## Overview
 
-Given an input image and a spatial reasoning question, AdaptVis enhances the spatial understanding of standard VLMs by injecting world-model priors at the feature-map level. Compared with original VLM features, AdaptVis produces more geometry-aware representations that improve spatial grounding and answer accuracy across diverse benchmarks.
+Given an input image and a spatial reasoning question, GeoWorld-VLM enhances the spatial understanding of standard VLMs by injecting world-model priors at the feature-map level. Compared with original VLM features, GeoWorld-VLM produces more geometry-aware representations that improve spatial grounding and answer accuracy across diverse benchmarks.
 
-![AdaptVis overview](figures/fig1.png)
+![GeoWorld-VLM overview](figures/fig1.png)
 
-*Figure 1. Overview. AdaptVis injects world-model priors into VLM visual features, producing more geometry-aware representations and stronger spatial reasoning performance than strong baselines (raw Gemma-4, task-only fine-tuning, and DINO-augmented fine-tuning) on benchmarks such as What’sUp and VSR.*
+*Figure 1. Overview. GeoWorld-VLM injects world-model priors into VLM visual features, producing more geometry-aware representations and stronger spatial reasoning performance than strong baselines (raw Gemma-4, task-only fine-tuning, and DINO-augmented fine-tuning) on benchmarks such as What’sUp and VSR.*
 
 ## Method at a Glance
 
-During training, AdaptVis fine-tunes only the VLM vision stack, including the vision encoder and multimodal projector. It aligns latent features from the VLM encoder with intermediate world-model representations, where the world model takes the input image, text prompt, and randomly sampled camera poses as input. At inference time, the world model is no longer needed, and AdaptVis runs as standard VLM inference.
+During training, GeoWorld-VLM fine-tunes only the VLM vision stack, including the vision encoder and multimodal projector. It aligns latent features from the VLM encoder with intermediate world-model representations, where the world model takes the input image, text prompt, and randomly sampled camera poses as input. At inference time, the world model is no longer needed, and GeoWorld-VLM runs as standard VLM inference.
 
 ![GeoWorld-VLM method](figures/fig2.png)
 
@@ -24,7 +24,7 @@ During training, AdaptVis fine-tunes only the VLM vision stack, including the vi
 
 ## Results Snapshot
 
-On the What’sUp + VSR suite, AdaptVis consistently improves spatial reasoning across sub-benchmarks, outperforming the original VLM, task-only fine-tuning, and static DINOv3-feature distillation.
+On the What’sUp + VSR suite, GeoWorld-VLM consistently improves spatial reasoning across sub-benchmarks, outperforming the original VLM, task-only fine-tuning, and static DINOv3-feature distillation.
 
 ![Overall comparison on What’sUp + VSR](figures/fig4.png)
 
@@ -74,12 +74,14 @@ pip install -r requirements.txt
 
 Install any extra dependencies required by your local LingBot-World-Fast checkout following the LingBot-World instructions.
 
+> Note: some script and variable names still use legacy `adaptvis` prefixes for compatibility with earlier experiments.
+
 
 ## Models
 
 Download or prepare the following local model directories:
 
-- **Gemma4 VLM**: base VLM used as the student and for raw evaluation.
+- **Gemma-4 VLM**: base VLM used as the student and for raw evaluation.
   - https://huggingface.co/google/gemma-4-E4B-it
 - **LingBot-World-Fast**: frozen world-model teacher used for feature alignment.
   - https://huggingface.co/robbyant/lingbot-world-fast
@@ -267,9 +269,9 @@ The exported directory can be passed directly to the evaluation scripts as `MODE
 We provide two public evaluation entry points:
 
 - `scripts/eval_raw_model.sh`: evaluates the original base model.
-- `scripts/eval_ours_model.sh`: evaluates an exported AdaptVis model.
+- `scripts/eval_ours_model.sh`: evaluates an exported GeoWorld-VLM model.
 
-### Raw Gemma4
+### Raw Gemma-4
 
 ```bash
 TASK=whatsup_vsr bash scripts/eval_raw_model.sh
@@ -277,7 +279,7 @@ TASK=embspatial bash scripts/eval_raw_model.sh
 TASK=sat bash scripts/eval_raw_model.sh
 ```
 
-### AdaptVis Model
+### GeoWorld-VLM Model
 
 ```bash
 OURS_MODEL=/path/to/exported_hf_model TASK=whatsup_vsr bash scripts/eval_ours_model.sh
